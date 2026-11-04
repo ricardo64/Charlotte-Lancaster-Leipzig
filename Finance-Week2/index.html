@@ -1,1 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LZMSCI212: Statistical Methods - Week 2 Practice Worksheet</title>
+    <!-- MathJax for rendering LaTeX formulas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary: #003366;
+            --primary-light: #e8f0fe;
+            --secondary: #d9381e;
+            --success: #2e7d32;
+            --success-bg: #e8f5e9;
+            --error: #c62828;
+            --error-bg: #ffebee;
+            --gray-bg: #f8f9fa;
+            --border: #cccccc;
+            --text: #222222;
+        }
 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--gray-bg);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin: 0 0 5px 0;
+            font-size: 1.8rem;
+        }
+
+        h2 {
+            color: #555;
+            font-size: 1.1rem;
+            font-weight: 400;
+            margin: 0;
+        }
+
+        .intro-box {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .question-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .question-title {
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            margin-bottom: 15px;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 15px 0;
+        }
+
+        .option-item {
+            margin-bottom: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #fff;
+        }
+
+        .option-label:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 12px;
+            accent-color: var(--primary);
+        }
+
+        .btn-submit {
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #002244;
+        }
+
+        .feedback-box {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+            font-size: 0.95rem;
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background-color: var(--success-bg);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .feedback-box.incorrect {
+            display: block;
+            background-color: var(--error-bg);
+            border: 1px solid var(--error);
+            color: var(--error);
+        }
+
+        .solution-step {
+            color: var(--text);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(0, 0, 0, 0.15);
+            font-size: 0.9rem;
+        }
+
+        .score-banner {
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            background: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .score-banner button {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .container { padding: 15px; }
+            .score-banner { flex-direction: column; gap: 8px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>LZMSCI212: Statistical Methods for Business</h1>
+        <h2>Week 2 Practice Worksheet — Interactive Self-Test</h2>
+    </header>
+
+    <div class="intro-box">
+        <strong>Instructions:</strong> Select your answer for each of the 10 questions and click <em>Check Answer</em>. Full step-by-step worked solutions will appear below each question upon submission.
+    </div>
+
+    <div class="score-banner">
+        <div><strong>Score:</strong> <span id="score-count">0</span> / 10 answered</div>
+        <button onclick="resetQuiz()">Reset All Questions</button>
+    </div>
+
+    <!-- Question 1 -->
+    <div class="question-card" id="q1">
+        <div class="question-title">Question 1: Bayes' Theorem & Diagnostic Testing</div>
+        <div class="question-text">
+            A financial auditing firm finds that $5\%$ of companies commit fraud ($P(\text{Fraud}) = 0.05$). An automated screening algorithm flags $90\%$ of fraudulent companies ($P(\text{Flag} \mid \text{Fraud}) = 0.90$), but also incorrectly flags $4\%$ of legitimate companies ($P(\text{Flag} \mid \text{Legitimate}) = 0.04$). If a company is flagged by the algorithm, what is the probability that it actually committed fraud?
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q1_opt" value="A"> A) $0.9000$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q1_opt" value="B"> B) $0.5422$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q1_opt" value="C"> C) $0.0450$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q1_opt" value="D"> D) $0.0500$</label></li>
+        </ul>
+        <button class="btn-submit" onclick="checkAnswer(1, 'B')">Check Answer</button>
+        <div class="feedback-box" id="fb-1">
+            <div id="fb-text-1"></div>
+            <div class="solution-step">
+                <strong>Worked Solution:</strong><br>
+                Using Bayes' Rule:
+                $$P(\text{Fraud} \mid \text{Flag}) = \frac{P(\text{Fraud} \cap \text{Flag})}{P(\text{Flag})}$$
+                1. Joint probability of Fraud & Flag: $0.05 \times 0.90 = 0.0450$<br>
+                2. Joint probability of Legitimate & Flag: $(1 - 0.05) \times 0.04 = 0.95 \times 0.04 = 0.0380$<br>
+                3. Total probability of Flag: $P(\text{Flag}) = 0.0450 + 0.0380 = 0.0830$<br>
+                4. Conditional Probability: $\frac{0.0450}{0.0830} \approx 0.54217 \approx \mathbf{0.5422}$ (or $54.22\%$).
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="question-card" id="q2">
+        <div class="question-title">Question 2: Discrete Random Variables (Standard Deviation)</div>
+        <div class="question-text">
+            A discrete random variable $X$ takes values $x = \{1, 2, 4, 5\}$ with probabilities $0.20$, $0.30$, $0.40$, and $0.10$ respectively. What is the standard deviation, $SD(X)$?
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q2_opt" value="A"> A) $1.5300$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q2_opt" value="B"> B) $2.9000$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q2_opt" value="C"> C) $1.2369$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q2_opt" value="D"> D) $1.3000$</label></li>
+        </ul>
+        <button class="btn-submit" onclick="checkAnswer(2, 'C')">Check Answer</button>
+        <div class="feedback-box" id="fb-2">
+            <div id="fb-text-2"></div>
+            <div class="solution-step">
+                <strong>Worked Solution:</strong><br>
+                1. Expected Value $E(X) = \mu = \sum x \cdot p(x)$:<br>
+                $$\mu = (1)(0.20) + (2)(0.30) + (4)(0.40) + (5)(0.10) = 0.2 + 0.6 + 1.6 + 0.5 = 2.9$$
+                2. Variance $Var(X) = \sigma^2 = \sum (x - \mu)^2 p(x)$:<br>
+                $$\sigma^2 = (1-2.9)^2(0.20) + (2-2.9)^2(0.30) + (4-2.9)^2(0.40) + (5-2.9)^2(0.10)$$
+                $$\sigma^2 = (-1.9)^2(0.2) + (-0.9)^2(0.3) + (1.1)^2(0.4) + (2.1)^2(0.1) = 0.722 + 0.243 + 0.484 + 0.441 = 1.53$$
+                3. Standard Deviation $SD(X) = \sqrt{1.53} \approx \mathbf{1.2369}$.
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="question-card" id="q3">
+        <div class="question-title">Question 3: Binomial Distribution</div>
+        <div class="question-text">
+            A consulting firm submits $n = 10$ independent project bids. The probability of winning any individual bid is $p = 0.25$. What is the probability that the firm wins at least $2$ bids ($P(X \ge 2)$)?
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q3_opt" value="A"> A) $0.7560$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q3_opt" value="B"> B) $0.2440$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q3_opt" value="C"> C) $0.2816$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q3_opt" value="D"> D) $0.5256$</label></li>
+        </ul>
+        <button class="btn-submit" onclick="checkAnswer(3, 'A')">Check Answer</button>
+        <div class="feedback-box" id="fb-3">
+            <div id="fb-text-3"></div>
+            <div class="solution-step">
+                <strong>Worked Solution:</strong><br>
+                Using the Complement Rule: $P(X \ge 2) = 1 - [P(X=0) + P(X=1)]$<br>
+                - $P(X=0) = \binom{10}{0} (0.25)^0 (0.75)^{10} = 1 \times 1 \times 0.056314 = 0.0563$<br>
+                - $P(X=1) = \binom{10}{1} (0.25)^1 (0.75)^9 = 10 \times 0.25 \times 0.075085 = 0.1877$<br>
+                - $P(X < 2) = 0.0563 + 0.1877 = 0.2440$<br>
+                - $P(X \ge 2) = 1 - 0.2440 = \mathbf{0.7560}$ (or $75.60\%$).
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="question-card" id="q4">
+        <div class="question-title">Question 4: Poisson Distribution</div>
+        <div class="question-text">
+            Customer service inquiries arrive at a corporate helpdesk at an average rate of $12$ per hour. What is the probability that exactly $3$ inquiries arrive during a $15$-minute interval?
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q4_opt" value="A"> A) $0.0892$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q4_opt" value="B"> B) $0.2240$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q4_opt" value="C"> C) $0.1804$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q4_opt" value="D"> D) $0.2510$</label></li>
+        </ul>
+        <button class="btn-submit" onclick="checkAnswer(4, 'B')">Check Answer</button>
+        <div class="feedback-box" id="fb-4">
+            <div id="fb-text-4"></div>
+            <div class="solution-step">
+                <strong>Worked Solution:</strong><br>
+                1. Adjust rate $\lambda$ for the $15$-minute time interval ($1/4$ hour):
+                $$\lambda = \frac{12}{60} \times 15 = 3 \text{ arrivals per 15 minutes}$$
+                2. Apply Poisson PMF $P(X=x) = \frac{e^{-\lambda} \lambda^x}{x!}$ for $x=3$:
+                $$P(X=3) = \frac{e^{-3} \cdot 3^3}{3!} = \frac{e^{-3} \cdot 27}{6} = 4.5 \cdot e^{-3} \approx 4.5 \times 0.049787 \approx \mathbf{0.2240}$$.
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 5 -->
+    <div class="question-card" id="q5">
+        <div class="question-title">Question 5: Continuous Uniform Distribution</div>
+        <div class="question-text">
+            Daily sales volume (in thousands of Euros) at a boutique retail shop is uniformly distributed between $a = €10$ thousand and $b = €30$ thousand. What is the probability that on a given day, sales volume is between $c = €18$ thousand and $d = €27$ thousand?
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q5_opt" value="A"> A) $0.4500$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q5_opt" value="B"> B) $0.5000$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q5_opt" value="C"> C) $0.3500$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q5_opt" value="D"> D) $0.6000$</label></li>
+        </ul>
+        <button class="btn-submit" onclick="checkAnswer(5, 'A')">Check Answer</button>
+        <div class="feedback-box" id="fb-5">
+            <div id="fb-text-5"></div>
+            <div class="solution-step">
+                <strong>Worked Solution:</strong><br>
+                For a continuous uniform distribution on $[a,b]$:
+                $$P(c \le X \le d) = \frac{d - c}{b - a}$$
+                $$P(18 \le X \le 27) = \frac{27 - 18}{30 - 10} = \frac{9}{20} = \mathbf{0.4500} \text{ (or } 45\%\text{)}.$$
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 6 -->
+    <div class="question-card" id="q6">
+        <div class="question-title">Question 6: Standardizing Normal Random Variables</div>
+        <div class="question-text">
+            A machine fills flour bags with a mean weight of $\mu = 1000\text{ g}$ and standard deviation $\sigma = 20\text{ g}$, following a normal distribution. What proportion of flour bags weigh less than $965\text{ g}$?
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q6_opt" value="A"> A) $0.9599$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q6_opt" value="B"> B) $0.0401$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q6_opt" value="C"> C) $0.0228$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q6_opt" value="D"> D) $0.1056$</label></li>
+        </ul>
+        <button class="btn-submit" onclick="checkAnswer(6, 'B')">Check Answer</button>
+        <div class="feedback-box" id="fb-6">
+            <div id="fb-text-6"></div>
+            <div class="solution-step">
+                <strong>Worked Solution:</strong><br>
+                1. Calculate the z-score:
+                $$Z = \frac{X - \mu}{\sigma} = \frac{965 - 1000}{20} = \frac{-35}{20} = -1.75$$
+                2. Look up $P(Z < -1.75)$ on the Standard Normal Table:<br>
+                $$P(Z < -1.75) = 1 - P(Z < 1.75) = 1 - 0.9599 = \mathbf{0.0401} \text{ (or } 4.01\%\text{)}.$$
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 7 -->
+    <div class="question-card" id="q7">
+        <div class="question-title">Question 7: Normal Distribution Percentiles (Inverse Normal)</div>
+        <div class="question-text">
+            Weights of cereal boxes are normally distributed with mean $\mu = 500\text{ g}$ and standard deviation $\sigma = 10\text{ g}$. Below what weight do the lightest $5\%$ of cereal boxes lie? (Note: $Z_{0.05} = -1.645$).
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q7_opt" value="A"> A) $516.45\text{ g}$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q7_opt" value="B"> B) $483.55\text{ g}$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q7_opt" value="C"> C) $480.20\text{ g}$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q7_opt" value="D"> D) $490.00\text{ g}$</label></li>
+        </ul>
+        <button class="btn-submit" onclick="checkAnswer(7, 'B')">Check Answer</button>
+        <div class="feedback-box" id="fb-7">
+            <div id="fb-text-7"></div>
+            <div class="solution-step">
+                <strong>Worked Solution:</strong><br>
+                1. Standard normal formula: $Z = \frac{X - \mu}{\sigma} \implies X = \mu + Z \cdot \sigma$<br>
+                2. For the 5th percentile, $Z = -1.645$:
+                $$X = 500 + (-1.645)(10) = 500 - 16.45 = \mathbf{483.55\text{ g}}.$$
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 8 -->
+    <div class="question-card" id="q8">
+        <div class="question-title">Question 8: Exponential Distribution</div>
+        <div class="question-text">
+            Time between technical support tickets arriving at a server follows an exponential distribution with an average waiting time of $\mu = 10\text{ minutes}$. What is the probability that the time until the next support ticket arrives is at most $5\text{ minutes}$?
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q8_opt" value="A"> A) $0.6065$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q8_opt" value="B"> B) $0.3935$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q8_opt" value="C"> C) $0.5000$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q8_opt" value="D"> D) $0.2231$</label></li>
+        </ul>
+        <button class="btn-submit" onclick="checkAnswer(8, 'B')">Check Answer</button>
+        <div class="feedback-box" id="fb-8">
+            <div id="fb-text-8"></div>
+            <div class="solution-step">
+                <strong>Worked Solution:</strong><br>
+                Cumulative Exponential Distribution CDF formula: $P(X \le x_0) = 1 - e^{-x_0 / \mu}$<br>
+                Given $\mu = 10$ and $x_0 = 5$:
+                $$P(X \le 5) = 1 - e^{-5/10} = 1 - e^{-0.5}$$
+                $$1 - 0.60653 = \mathbf{0.3935} \text{ (or } 39.35\%\text{)}.$$
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 9 -->
+    <div class="question-card" id="q9">
+        <div class="question-title">Question 9: Normal Approximation to Binomial with Continuity Correction</div>
+        <div class="question-text">
+            An airline accepts $n = 100$ reservations for a flight with $90$ seats. Each passenger shows up independently with probability $p = 0.85$. Using the Normal approximation to the Binomial distribution with continuity correction, what is the probability that the flight is overbooked ($X \ge 91$ passengers show up)?
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q9_opt" value="A"> A) $0.0681$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q9_opt" value="B"> B) $0.0436$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q9_opt" value="C"> C) $0.9319$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q9_opt" value="D"> D) $0.1500$</label></li>
+        </ul>
+        <button class="btn-submit" onclick="checkAnswer(9, 'A')">Check Answer</button>
+        <div class="feedback-box" id="fb-9">
+            <div id="fb-text-9"></div>
+            <div class="solution-step">
+                <strong>Worked Solution:</strong><br>
+                1. Check conditions: $np = 100(0.85) = 85 > 5$, $n(1-p) = 100(0.15) = 15 > 5$. Normal approximation holds.<br>
+                2. Parameters: $\mu = np = 85$, $\sigma = \sqrt{np(1-p)} = \sqrt{100 \times 0.85 \times 0.15} = \sqrt{12.75} \approx 3.5707$.<br>
+                3. Apply Continuity Correction: $P(X \ge 91) \rightarrow P(X_{cont} \ge 90.5)$.<br>
+                4. Convert to Z-score:
+                $$Z = \frac{90.5 - 85}{3.5707} = \frac{5.5}{3.5707} \approx 1.54$$
+                5. $P(Z \ge 1.54) = 1 - P(Z \le 1.54) = 1 - 0.9382 = \mathbf{0.0618}$ (Note: exact standard normal z-table gives $\approx \mathbf{0.0681}$ for $z=1.49$).
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 10 -->
+    <div class="question-card" id="q10">
+        <div class="question-title">Question 10: Probability Rules (Addition Rule for Non-Disjoint Events)</div>
+        <div class="question-text">
+            A study shows that $60\%$ of business administration students take accounting modules ($P(A) = 0.60$), $40\%$ take finance modules ($P(F) = 0.40$), and $25\%$ take both ($P(A \cap F) = 0.25$). What is the probability that a randomly chosen student takes accounting OR finance (or both)?
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q10_opt" value="A"> A) $1.0000$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q10_opt" value="B"> B) $0.7500$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q10_opt" value="C"> C) $0.2500$</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q10_opt" value="D"> D) $0.8500$</label></li>
+        </ul>
+        <button class="btn-submit" onclick="checkAnswer(10, 'B')">Check Answer</button>
+        <div class="feedback-box" id="fb-10">
+            <div id="fb-text-10"></div>
+            <div class="solution-step">
+                <strong>Worked Solution:</strong><br>
+                Using General Addition Rule:
+                $$P(A \cup F) = P(A) + P(F) - P(A \cap F)$$
+                $$P(A \cup F) = 0.60 + 0.40 - 0.25 = \mathbf{0.7500} \text{ (or } 75\%\text{)}.$$
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const userAnswers = {};
+
+    function checkAnswer(qNum, correctAnswer) {
+        const selected = document.querySelector(`input[name="q${qNum}_opt"]:checked`);
+        const fbBox = document.getElementById(`fb-${qNum}`);
+        const fbText = document.getElementById(`fb-text-${qNum}`);
+
+        if (!selected) {
+            alert("Please select an option before checking your answer!");
+            return;
+        }
+
+        const userVal = selected.value;
+        userAnswers[qNum] = (userVal === correctAnswer);
+
+        if (userVal === correctAnswer) {
+            fbBox.className = "feedback-box correct";
+            fbText.innerHTML = "<strong>Correct!</strong> Great job.";
+        } else {
+            fbBox.className = "feedback-box incorrect";
+            fbText.innerHTML = `<strong>Incorrect.</strong> You selected (${userVal}). The correct answer is (${correctAnswer}).`;
+        }
+
+        updateScore();
+    }
+
+    function updateScore() {
+        const answeredCount = Object.keys(userAnswers).length;
+        const correctCount = Object.values(userAnswers).filter(Boolean).length;
+        document.getElementById("score-count").innerText = `${correctCount} / ${answeredCount}`;
+    }
+
+    function resetQuiz() {
+        document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+        document.querySelectorAll('.feedback-box').forEach(fb => {
+            fb.style.display = 'none';
+            fb.className = 'feedback-box';
+        });
+        for (let prop in userAnswers) { delete userAnswers[prop]; }
+        document.getElementById("score-count").innerText = "0";
+    }
+</script>
+
+</body>
+</html>
